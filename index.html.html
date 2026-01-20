@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swami Photo Studio | 3D Photography Website</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#0b0b0f;color:#fff;overflow-x:hidden;}
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:20px 6%;
+  display:flex;
+  justify-content:space-between;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(10px);
+  z-index:10;
+}
+
+.logo{font-weight:700;letter-spacing:2px;}
+.phone{opacity:0.9;}
+
+.hero{height:100vh;position:relative;}
+#three-canvas{position:absolute;inset:0;}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:0 10%;
+}
+
+.hero-content h1{font-size:3.8rem;margin-bottom:15px;}
+.hero-content p{opacity:0.85;margin-bottom:30px;}
+
+.btn{
+  padding:15px 45px;
+  background:#6f7cff;
+  color:black;
+  text-decoration:none;
+  border-radius:50px;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 30px rgba(111,124,255,0.5);
+}
+
+.services{
+  padding:100px 8%;
+  text-align:center;
+}
+
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+  margin-top:50px;
+}
+
+.service-card{
+  padding:35px;
+  background:rgba(255,255,255,0.06);
+  border-radius:20px;
+}
+
+.contact{
+  padding:80px 8%;
+  background:#111;
+  text-align:center;
+}
+
+footer{
+  padding:30px;
+  text-align:center;
+  opacity:0.6;
+  font-size:0.9rem;
+}
+
+@media(max-width:768px){
+  .hero-content h1{font-size:2.5rem;}
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo">Swami Photo Studio</div>
+  <div class="phone">📞 99679 47583</div>
+</header>
+
+<section class="hero">
+  <canvas id="three-canvas"></canvas>
+  <div class="hero-content">
+    <h1>Capturing Life’s Greatest Stories</h1>
+    <p>Thane’s Most Trusted Professional Photography & Cinematic Studio</p>
+    <a href="#contact" class="btn">Book Now</a>
+  </div>
+</section>
+
+<section class="services">
+  <h2>Our Services</h2>
+  <div class="service-grid">
+    <div class="service-card">
+      <h3>Weddings & Events</h3>
+      <p>Cinematic storytelling for your big day.</p>
+    </div>
+    <div class="service-card">
+      <h3>Product Photography</h3>
+      <p>High-end visuals for brands.</p>
+    </div>
+    <div class="service-card">
+      <h3>Studio Portraits</h3>
+      <p>Professional lighting & premium setups.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <h2>Visit Our Studio</h2>
+  <p>
+    Shop no.25, Ground Floor, Arcadia Shopping Center,<br>
+    Hiranandani Estate, Thane West – 400607
+  </p>
+  <strong>📞 99679 47583</strong>
+</section>
+
+<footer>
+  © 2024 Swami Photo Studio • 4.8★ Rated • Thane
+</footer>
+
+<script>
+const canvas=document.getElementById("three-canvas");
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,100);
+camera.position.z=8;
+
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const geometry=new THREE.TorusGeometry(1.2,0.4,30,100);
+const material=new THREE.MeshStandardMaterial({
+  color:0x6f7cff,
+  metalness:0.8,
+  roughness:0.2
+});
+const lens=new THREE.Mesh(geometry,material);
+scene.add(lens);
+
+scene.add(new THREE.PointLight(0xffffff,1));
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+
+function animate(){
+  requestAnimationFrame(animate);
+  lens.rotation.x+=0.004;
+  lens.rotation.y+=0.006;
+  renderer.render(scene,camera);
+}
+animate();
+
+document.addEventListener("mousemove",(e)=>{
+  lens.rotation.y=e.clientX*0.0005;
+  lens.rotation.x=e.clientY*0.0005;
+});
+
+window.addEventListener("resize",()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
+
+</body>
+</html>
